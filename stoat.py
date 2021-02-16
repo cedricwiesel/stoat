@@ -42,7 +42,7 @@ async def invite(ctx):
 
 #Kick Command
 @bot.command(
-    brief="Kicks a member"
+    brief="Kicks a user"
 )
 async def kick(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).kick_members):
@@ -64,7 +64,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 
 #Ban Command
 @bot.command(
-    brief="Bans a member"
+    brief="Bans a user"
 )
 async def ban(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).ban_members):
