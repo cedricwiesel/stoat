@@ -97,6 +97,13 @@ async def ping(ctx):
 async def p(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
 
+#Stoat Command
+@bot.command(
+    brief="Stoat"
+)
+async def stoat(ctx):
+    await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
+
 #Bot Status  
 @bot.event
 async def on_ready():
