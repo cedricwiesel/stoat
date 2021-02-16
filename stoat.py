@@ -23,14 +23,14 @@ async def sheriffmod(ctx):
     brief="Shows the link for Among Us Proximity Chat Mod"
 )
 async def proximitymod(ctx):
-    await ctx.send("https://github.com/ottomated/CrewLink/releases")
+    await ctx.send("<https://github.com/ottomated/CrewLink/releases>")
 
 #Invite Command
 @bot.command(
     brief="Shows you the link to invite this bot to your server"
 )
 async def invite(ctx):
-    await ctx.send("https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=379910&scope=bot")
+    await ctx.send("<https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=379910&scope=bot>")
 
 #Kick Command
 @bot.command(
