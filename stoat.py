@@ -96,7 +96,8 @@ async def ping(ctx):
 )
 async def p(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
-    
+
+#Bot Status  
 @bot.event
 async def on_ready():
     activity = discord.Game(name="/help", type=3)
