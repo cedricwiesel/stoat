@@ -111,9 +111,9 @@ async def stoat(ctx):
 async def say(ctx, arg):
     if (ctx.author.id == 270590533880119297):
         await ctx.send(arg)
-    
+        
     else:
-        await ctx.send("Nah I don't think I will")
+        await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811245358519681084/d97.png")
 
 #Bot Status  
 @bot.event
