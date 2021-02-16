@@ -132,7 +132,7 @@ async def say(ctx, arg):
 
 @bot.command()
 async def ping(ctx):
-     await ctx.send(f'Pong! {round(bot.latency * 1000)}ms')
+     await ctx.send(f'Pong! \033[1m {round(bot.latency * 1000)}ms \033[0m')
 
 #Bot Status  
 @bot.event
