@@ -122,7 +122,7 @@ async def stoat(ctx):
 @bot.command(
     brief="Stoat"
 )
-async def test(ctx):
+async def tester(ctx):
     await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
 #Say Command
