@@ -101,7 +101,7 @@ async def hey(ctx):
 @bot.command(
     brief="Pinging everyone is annoying"
 )
-async def ping(ctx):
+async def everyone(ctx):
     await ctx.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
 
 #Music Command
