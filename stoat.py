@@ -133,7 +133,7 @@ async def say(ctx, arg):
     brief=("Pong!")
 )
 async def ping(ctx):
-    await ctx.send('Pong! {0}'.format(round(bot.latency)))
+    await ctx.send('Pong! {0}'.format(round(bot.latency, 1)))
 
 #Bot Status  
 @bot.event
