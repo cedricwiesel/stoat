@@ -118,6 +118,13 @@ async def p(ctx):
 async def stoat(ctx):
     await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
+    #Stoat Command
+@bot.command(
+    brief="Stoat"
+)
+async def test(ctx):
+    await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
+
 #Say Command
 @bot.command(
     brief=("Restricted Command")
