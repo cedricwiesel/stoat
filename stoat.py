@@ -50,7 +50,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
             await ctx.send("You can't kick this person")
 
         elif(member.id == 810913013351055411):
-            await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811273533703323708/d97.png")
+            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to kick this person")
@@ -75,7 +75,7 @@ async def ban(ctx, member : discord.Member, *, reason = None):
             await ctx.send("You can't ban this person")
 
         elif(member.id == 810913013351055411):
-            await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811273533703323708/d97.png")
+            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to ban this person")
@@ -134,7 +134,7 @@ async def say(ctx, arg):
         await ctx.send(arg)
         
     else:
-        await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811273533703323708/d97.png")
+        await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
 #Bot Status  
 @bot.event
