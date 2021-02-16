@@ -127,10 +127,12 @@ async def tester(ctx):
 
 #Say Command
 @bot.command(
+    pass_context = True,
     brief=("Restricted Command")
 )
 async def say(ctx, arg):
     if (ctx.author.id == 270590533880119297 or 435483521193082890):
+        await bot.delete_message(ctx.message)
         await ctx.send(arg)
         
     else:
