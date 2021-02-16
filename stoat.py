@@ -104,6 +104,17 @@ async def p(ctx):
 async def stoat(ctx):
     await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
+#Say Command
+@bot.command(
+    brief=("Restricted Command")
+)
+async def say(ctx, arg):
+    if (ctx.author.id == 270590533880119297):
+        await ctx.send(arg)
+    
+    else:
+        await ctx.send("Nah I won't")
+
 #Bot Status  
 @bot.event
 async def on_ready():
