@@ -118,19 +118,12 @@ async def p(ctx):
 async def stoat(ctx):
     await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
-    #Stoat Command
-@bot.command(
-    brief="Stoat"
-)
-async def tester(ctx):
-    await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
-
 #Say Command
 @bot.command(
     brief=("Restricted Command")
 )
 async def say(ctx, arg):
-    if (ctx.author.id ==   435483521193082890) or (ctx.author.is_owner):
+    if (ctx.author.id ==   435483521193082890) or (ctx.author.permissions.guild_owner):
         await ctx.send(arg)
         
     else:
