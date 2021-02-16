@@ -2,7 +2,15 @@ import discord
 import os
 from discord.ext import commands
 
-bot = commands.Bot(command_prefix="/")
+#help command modifier
+help_command = commands.DefaultHelpCommand(
+    no_category = ('Commands')
+)
+
+bot = commands.Bot(
+    command_prefix=("/"),
+    help_command = help_command
+    )
 
 #Role Mod Command
 @bot.command(
