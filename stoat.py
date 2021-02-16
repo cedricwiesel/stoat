@@ -47,10 +47,10 @@ async def invite(ctx):
 async def kick(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).kick_members):
         if (member.id == 270590533880119297):
-            await ctx.send("You can't kick this person")
+            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
         elif(member.id == 810913013351055411):
-            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
+            await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
 
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to kick this person")
@@ -72,10 +72,10 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 async def ban(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).ban_members):
         if (member.id == 270590533880119297):
-            await ctx.send("You can't ban this person")
+            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
         elif(member.id == 810913013351055411):
-            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
+            await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
 
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to ban this person")
