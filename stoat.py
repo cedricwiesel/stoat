@@ -49,6 +49,9 @@ async def kick(ctx, member : discord.Member, *, reason = None):
         if (member.id == 270590533880119297):
             await ctx.send("You can't kick this person")
 
+        elif(member.id == 810913013351055411):
+            await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811245358519681084/d97.png")
+
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to kick this person")
 
@@ -70,6 +73,9 @@ async def ban(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).ban_members):
         if (member.id == 270590533880119297):
             await ctx.send("You can't ban this person")
+
+        elif(member.id == 810913013351055411):
+            await ctx.send("https://cdn.discordapp.com/attachments/606414586312130560/811245358519681084/d97.png")
 
         elif (ctx.author.top_role.position < member.top_role.position):
             return await ctx.send("You do not have permission to ban this person")
