@@ -101,7 +101,7 @@ async def hey(ctx):
 @bot.command(
     brief="Pinging everyone is annoying"
 )
-async def everyone(ctx):
+async def stfu(ctx):
     await ctx.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
 
 #Music Command
@@ -130,7 +130,9 @@ async def say(ctx, arg):
         await ctx.send("/say I'm dumb")
 
 
-@bot.command()
+@bot.command(
+    brief=("Shows my ping")
+)
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
 
