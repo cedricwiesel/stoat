@@ -129,11 +129,10 @@ async def say(ctx, arg):
     else:
         await ctx.send("/say I'm dumb")
 
-@bot.command(
-    brief=("Pong!")
-)
+
+@bot.command()
 async def ping(ctx):
-    await ctx.send('Pong! {0}'.format(round(bot.latency, 1)))
+     await ctx.send(f'Pong! In {round(bot.latency * 1000)}ms')
 
 #Bot Status  
 @bot.event
