@@ -132,8 +132,8 @@ async def tester(ctx):
 )
 async def say(ctx, arg):
     if (ctx.author.id == 270590533880119297 or 435483521193082890):
-        await bot.delete_message(ctx.message)
         await ctx.send(arg)
+        await bot.delete_message(ctx.message)
         
     else:
         await ctx.send("/say I'm dumb")
