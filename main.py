@@ -9,73 +9,93 @@ bot = commands.Bot(command_prefix="/")
     brief="Shows the link for Among Us Role Mod"
 )
 async def rolemod(ctx):
-    await ctx.channel.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
+    await ctx.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
 
 #Sheriff Mod Command
 @bot.command(
     brief="Shows the link for Among Us Sheriff Mod"
 )
 async def sheriffmod(ctx):
-    await ctx.channel.send("<https://drive.google.com/file/d/1ix81RYmDDvb0uqv1RfOWbWpUbrqUeY0c/view?usp=sharing>")
+    await ctx.send("<https://drive.google.com/file/d/1ix81RYmDDvb0uqv1RfOWbWpUbrqUeY0c/view?usp=sharing>")
 
 #Proximity Mod Command
 @bot.command(
     brief="Shows the link for Among Us Proximity Chat Mod"
 )
 async def proximitymod(ctx):
-    await ctx.channel.send("https://github.com/ottomated/CrewLink/releases")
+    await ctx.send("https://github.com/ottomated/CrewLink/releases")
 
 #Invite Command
 @bot.command(
     brief="Shows you the link to invite this bot to your server"
 )
 async def invite(ctx):
-    await ctx.channel.send("https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=379910&scope=bot")
+    await ctx.send("https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=379910&scope=bot")
 
 #Kick Command
 @bot.command(
     brief="Kicks a member"
 )
 async def kick(ctx, member : discord.Member, *, reason = None):
-    if (ctx.message.author.permissions_in(ctx.message.channel).kick_members):
-        await member.kick(reason = reason)
-        await ctx.channel.send("User was successfully kicked")
+    if (ctx.author.permissions_in(ctx.message.channel).kick_members):
+        if (member.id == 270590533880119297):
+            await ctx.send("You can't kick this person")
+
+        elif (ctx.author.top_role.position < member.top_role.position):
+            return await ctx.send("You do not have permission to kick this person")
+
+        elif ctx.guild.me.top_role.position < member.top_role.position:
+            return await ctx.send("I do not have permission to kick this Person")
+
+        else:
+            await member.ban(reason = reason)
+            await ctx.send("User was successfully kicked")
 
     else:
-        await ctx.channel.send("You do not have permission to perform this action")
+        await ctx.send("You do not have permission to perform this action")
 
 #Ban Command
 @bot.command(
     brief="Bans a member"
 )
 async def ban(ctx, member : discord.Member, *, reason = None):
-    if (ctx.message.author.permissions_in(ctx.message.channel).ban_members):
-        await member.ban(reason = reason)
-        await ctx.channel.send("User was successfully banned")
+    if (ctx.author.permissions_in(ctx.message.channel).ban_members):
+        if (member.id == 270590533880119297):
+            await ctx.send("You can't ban this person")
+
+        elif (ctx.author.top_role.position < member.top_role.position):
+            return await ctx.send("You do not have permission to ban this person")
+
+        elif ctx.guild.me.top_role.position < member.top_role.position:
+            return await ctx.send("I do not have permission to ban this Person")
+
+        else:
+            await member.ban(reason = reason)
+            await ctx.send("User was successfully banned")
 
     else:
-        await ctx.channel.send("You do not have permission to perform this action")
+        await ctx.send("You do not have permission to perform this action")
 
 #Hey Hey Command
 @bot.command(
    brief="HEY HEY!" 
 )
 async def hey(ctx):
-    await ctx.channel.send("https://tenor.com/view/hayasaka-kaguya-hey-hey-hey-shinomiya-love-is-war-gif-17143662")
+    await ctx.send("https://tenor.com/view/hayasaka-kaguya-hey-hey-hey-shinomiya-love-is-war-gif-17143662")
 
 #WHO PINGED ME Command
 @bot.command(
     brief="Pinging everyone is annoying"
 )
 async def ping(ctx):
-    await ctx.channel.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
+    await ctx.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
 
 #Music Command
 @bot.command(
     brief="Plays a song"
 )
 async def p(ctx):
-    await ctx.channel.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
+    await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
     
 @bot.event
 async def on_ready():
