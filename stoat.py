@@ -134,7 +134,7 @@ async def say(ctx, arg):
         await ctx.send(arg)
         
     else:
-        await ctx.send("https://tenor.com/view/rvnx-rvnx-mango-handsome-fuck-you-middle-finger-gif-17792580")
+        await ctx.send("/say I'm dumb")
 
 #Bot Status  
 @bot.event
