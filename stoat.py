@@ -113,7 +113,7 @@ async def say(ctx, arg):
         await ctx.send(arg)
     
     else:
-        await ctx.send("Nah I won't")
+        await ctx.send("Nah I don't think I will")
 
 #Bot Status  
 @bot.event
