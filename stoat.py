@@ -42,7 +42,7 @@ async def invite(ctx):
 
 #Kick Command
 @bot.command(
-    brief="Kicks a user"
+    brief="Kicks a user (Requires Kick Permissions)"
 )
 async def kick(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).kick_members):
@@ -67,7 +67,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
 
 #Ban Command
 @bot.command(
-    brief="Bans a user"
+    brief="Bans a user (Requires Ban Permissions)"
 )
 async def ban(ctx, member : discord.Member, *, reason = None):
     if (ctx.author.permissions_in(ctx.message.channel).ban_members):
@@ -92,43 +92,47 @@ async def ban(ctx, member : discord.Member, *, reason = None):
 
 #Hey Hey Command
 @bot.command(
-   brief="HEY HEY!" 
+   brief="Shows a fun GIF" 
 )
 async def hey(ctx):
     await ctx.send("https://tenor.com/view/hayasaka-kaguya-hey-hey-hey-shinomiya-love-is-war-gif-17143662")
 
 #WHO PINGED ME Command
 @bot.command(
-    brief="Pinging everyone is annoying"
+    brief="Shows a fun GIF"
 )
 async def stfu(ctx):
     await ctx.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
 
 #Music Command
 @bot.command(
-    brief="Plays a song"
+    brief="(Doesn't) play a song"
 )
 async def p(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
 
 #Stoat Command
 @bot.command(
-    brief="Stoat"
+    brief="Shows a fun GIF"
 )
-async def stoat(ctx):
+async def trampoline(ctx):
     await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
 #Say Command
 @bot.command(
-    brief=("Restricted Command")
+    brief=("Makes the Bot say something (Requires Admin Permissions)")
 )
 async def say(ctx, arg):
-    if (ctx.author.id == 270590533880119297) or (ctx.author.id == 435483521193082890) or (ctx.author.id == 548820852133593093):
+    if (ctx.author.id == 435483521193082890) or (ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Admin
         await ctx.send(arg)
 
+    else:
+        await ctx.send("/say I'm Dumb")
+        await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
 
+#Latency Command
 @bot.command(
-    brief=("Shows my ping")
+    brief=("Shows the bots ping")
 )
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
@@ -136,7 +140,7 @@ async def ping(ctx):
 #Bot Status  
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="/help", type=3)
+    activity = discord.Game(name="New Update! Type /help", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
 
 bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
