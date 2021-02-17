@@ -123,7 +123,7 @@ async def stoat(ctx):
     brief=("Restricted Command")
 )
 async def say(ctx, arg):
-    if (ctx.author.id == 270590533880119297 or 435483521193082890):
+    if (ctx.author.id ==  435483521193082890):
         await ctx.send(arg)
         
     else:
