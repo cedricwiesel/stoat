@@ -123,7 +123,7 @@ async def trampoline(ctx):
     brief=("Makes the Bot say something (Requires Admin Permissions)")
 )
 async def say(ctx, arg):
-    if (ctx.author.id == 435483521193082890) or (ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Admin
+    if (ctx.author.id == 270590533880119297) or (ctx.author.id == 435483521193082890) or (ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Admin
         await ctx.send(arg)
 
     else:
