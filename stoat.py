@@ -129,7 +129,7 @@ async def say(ctx, arg):
 
     else:
         await ctx.send("/say I'm Dumb")
-        time.sleep(1) #wait three seconds
+        time.sleep(1.5) #wait three seconds
         await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
 
 #Latency Command
