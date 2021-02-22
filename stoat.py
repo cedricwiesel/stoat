@@ -2,6 +2,7 @@ import discord
 import time
 import os
 from discord.ext import commands
+import wikipedia
 
 #help command modifier
 help_command = commands.DefaultHelpCommand(
@@ -17,7 +18,7 @@ bot = commands.Bot(
 @bot.command(
     brief="Shows the link for Among Us Role Mod"
 )
-async def rolemod(ctx):
+async def rolmod(ctx):
     await ctx.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
 
 #Sheriff Mod Command
@@ -138,6 +139,48 @@ async def say(ctx, arg):
 )
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
+
+@bot.command(
+    brief=("Let's you search Wikipedia articles"),
+    pass_context=True
+)
+async def search(ctx):
+
+    #Load current lang for picture
+    global en
+
+    #Get user input
+    msg = ctx.message.content.split(" ")
+    request = msg[2:]
+    request = " ".join(request)
+    error = None
+
+
+    try:
+
+        wikicontent = wikipedia.search(request, results=20, suggestion=False) #Wikipedia search request
+        print(wikicontent)
+        print(" ".join(wikicontent))
+
+        #If there are no results
+        if not wikicontent:
+            wikicontent ="Sorry, there are no search results for '{}'.".format(request)
+            embed = discord.Embed(title="Wikipedia search results:", color=0xe74c3c, description=wikicontent)
+            embed.set_thumbnail(url="https://www.wikipedia.org/static/images/project-logos/{}wiki.png".format(current_language))
+            await bot.say(embed=embed)
+
+        #If there are do:
+        else:
+            embed = discord.Embed(title="Wikipedia search results:", color=0, description="\n".join(wikicontent))
+            embed.set_thumbnail(url="https://www.wikipedia.org/static/images/project-logos/{}wiki.png".format(current_language))
+            await bot.say(embed=embed)
+
+
+    #Handle random errors
+    except Exception as error:
+        error = str(error)
+        await bot.say("Sorry, a random error occurred. Please try again.")
+        print(error)
 
 #Bot Status  
 @bot.event
