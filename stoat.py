@@ -58,6 +58,9 @@ async def kick(ctx, member : discord.Member, *, reason = None) :
             elif member.id == 810913013351055411:
                 await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
 
+            elif not ctx.author.permissions_in(ctx.message.channel).kick_members:
+                await ctx.send("You do not have kick permissions in this server")
+
             elif ctx.author.top_role.position < member.top_role.position:
                 await ctx.send("You do not have permission to kick this person")
 
@@ -85,6 +88,9 @@ async def ban(ctx, member : discord.Member, *, reason = None) :
             
             elif member.id == 810913013351055411:
                 await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+
+            elif ctx.author.permissions_in(ctx.message.channel).ban_members:
+                await ctx.send("You do not have ban permissions in this server")
 
             elif ctx.author.top_role.position < member.top_role.position:
                 await ctx.send("You do not have permission to ban this person")
