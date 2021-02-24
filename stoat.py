@@ -48,59 +48,57 @@ async def invite(ctx):
 @bot.command(
     brief="Kicks a user (Requires Kick Permissions)"
 )
-async def kick(ctx, member : discord.Member, *, reason = None):
-    if ctx.author.permissions_in(ctx.message.channel).kick_members:
-        if member.id == 270590533880119297:
-            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
+async def kick(ctx, member : discord.Member, *, reason = None) :
+    if  ctx.guild.me.permissions_in(ctx.message.channel).kick_members:
 
-        elif member.id == 810913013351055411:
-            await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
-
-        elif ctx.guild.me.perissions_in(ctx.message.channel).kick_members:
-            return await ctx.send("I do not have permission to kick this Person")
-
-        elif ctx.guild.me.top_role.position < member.top_role.position:
-            return await ctx.send("I do not have permission to kick this Person")
+        if ctx.guild.me.top_role.position < member.top_role.position:
+            if member.id == 270590533880119297:
+                await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
             
-        elif ctx.author.top_role.position < member.top_role.position:
-            return await ctx.send("You do not have permission to kick this person")
+            elif member.id == 810913013351055411:
+                await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+
+            elif ctx.author.top_role.position < member.top_role.position:
+                await ctx.send("You do not have permission to kick this person")
+
+            else:
+                await member.kick(reason = reason)
+                await ctx.send("User was successfully kicked")
 
         else:
-            await member.kick(reason = reason)
-            await ctx.send("User was successfully kicked")
+            await ctx.send ("I do not have permissions to kick this user")
 
     else:
-        await ctx.send("You do not have permission to perform this action")
+        await ctx.send ("I do not have kick permissions in this server")
+
 
 #Ban Command
 @bot.command(
     brief="Bans a user (Requires Ban Permissions)"
 )
-async def ban(ctx, member : discord.Member, *, reason = None):
-    if (ctx.author.permissions_in(ctx.message.channel).ban_members):
-        if (member.id == 270590533880119297):
-            await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
+async def ban(ctx, member : discord.Member, *, reason = None) :
+    if  ctx.guild.me.permissions_in(ctx.message.channel).ban_members:
 
-        elif member.id == 810913013351055411:
-            await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+        if ctx.guild.me.top_role.position < member.top_role.position:
+            if member.id == 270590533880119297:
+                await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
+            
+            elif member.id == 810913013351055411:
+                await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
 
-        elif ctx.guild.me.perissions_in(ctx.message.channel).ban_members:
-            return await ctx.send("I do not have permission to ban this Person")
+            elif ctx.author.top_role.position < member.top_role.position:
+                await ctx.send("You do not have permission to ban this person")
 
-        elif ctx.guild.me.top_role.position < member.top_role.position:
-            return await ctx.send("I do not have permission to ban this Person")
+            else:
+                await member.ban(reason = reason)
+                await ctx.send("User was successfully banned")
 
-        elif ctx.author.top_role.position < member.top_role.position:
-            return await ctx.send("You do not have permission to ban this person")
-
-       
         else:
-            await member.ban(reason = reason)
-            await ctx.send("User was successfully banned")
+            await ctx.send ("I do not have permissions to ban this user")
 
     else:
-        await ctx.send("You do not have permission to perform this action")
-
+        await ctx.send ("I do not have ban permissions in this server")
+        
 #Hey Hey Command
 @bot.command(
    brief="Shows a fun GIF" 
