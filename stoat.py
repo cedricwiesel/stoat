@@ -1,7 +1,7 @@
 import discord
 import time
-import os
 from discord.ext import commands
+import os
 
 #help command modifier
 help_command = commands.DefaultHelpCommand(
@@ -12,6 +12,9 @@ bot = commands.Bot(
     command_prefix=("/"),
     help_command = help_command
     )
+
+#language for wikipedia
+current_language = "en" #Default language
 
 #Role Mod Command
 @bot.command(
