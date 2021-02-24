@@ -63,7 +63,7 @@ async def kick(ctx, member : discord.Member, *, reason = None):
             return await ctx.send("I do not have permission to kick this Person")
 
         else:
-            await member.ban(reason = reason)
+            await member.kick(reason = reason)
             await ctx.send("User was successfully kicked")
 
     else:
