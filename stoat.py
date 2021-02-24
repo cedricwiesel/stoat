@@ -49,17 +49,20 @@ async def invite(ctx):
     brief="Kicks a user (Requires Kick Permissions)"
 )
 async def kick(ctx, member : discord.Member, *, reason = None):
-    if (ctx.author.permissions_in(ctx.message.channel).kick_members):
-        if (member.id == 270590533880119297):
+    if ctx.author.permissions_in(ctx.message.channel).kick_members:
+        if member.id == 270590533880119297:
             await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
-        elif(member.id == 810913013351055411):
+        elif member.id == 810913013351055411:
             await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+
+        elif ctx.guild.me.perissions_in(ctx.message.channel).kick_members:
+            return await ctx.send("I do not have permission to kick this Person")
 
         elif ctx.guild.me.top_role.position < member.top_role.position:
             return await ctx.send("I do not have permission to kick this Person")
             
-        elif (ctx.author.top_role.position < member.top_role.position):
+        elif ctx.author.top_role.position < member.top_role.position:
             return await ctx.send("You do not have permission to kick this person")
 
         else:
@@ -78,13 +81,16 @@ async def ban(ctx, member : discord.Member, *, reason = None):
         if (member.id == 270590533880119297):
             await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
 
-        elif(member.id == 810913013351055411):
+        elif member.id == 810913013351055411:
             await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+
+        elif ctx.guild.me.perissions_in(ctx.message.channel).ban_members:
+            return await ctx.send("I do not have permission to ban this Person")
 
         elif ctx.guild.me.top_role.position < member.top_role.position:
             return await ctx.send("I do not have permission to ban this Person")
 
-        elif (ctx.author.top_role.position < member.top_role.position):
+        elif ctx.author.top_role.position < member.top_role.position:
             return await ctx.send("You do not have permission to ban this person")
 
        
