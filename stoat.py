@@ -51,7 +51,7 @@ async def invite(ctx):
 async def kick(ctx, member : discord.Member, *, reason = None) :
     if  ctx.guild.me.permissions_in(ctx.message.channel).kick_members:
 
-        if ctx.guild.me.top_role.position < member.top_role.position:
+        if ctx.guild.me.top_role.position > member.top_role.position:
             if member.id == 270590533880119297:
                 await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
             
@@ -82,7 +82,7 @@ async def kick(ctx, member : discord.Member, *, reason = None) :
 async def ban(ctx, member : discord.Member, *, reason = None) :
     if  ctx.guild.me.permissions_in(ctx.message.channel).ban_members:
 
-        if ctx.guild.me.top_role.position < member.top_role.position:
+        if ctx.guild.me.top_role.position > member.top_role.position:
             if member.id == 270590533880119297:
                 await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
             
