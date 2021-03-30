@@ -20,7 +20,7 @@ current_language = "en" #Default language
 @bot.command(
     brief="Shows the link for Among Us Role Mod"
 )
-async def rolmod(ctx):
+async def rolemod(ctx):
     await ctx.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
 
 #Sheriff Mod Command
