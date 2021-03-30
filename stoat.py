@@ -9,7 +9,7 @@ help_command = commands.DefaultHelpCommand(
 )
 
 bot = commands.Bot(
-    command_prefix=("/"),
+    command_prefix=(","),
     help_command = help_command
     )
 
@@ -142,9 +142,12 @@ async def say(ctx, arg):
         await ctx.send(arg)
 
     else:
-        await ctx.send("/say I'm Dumb")
+        await ctx.send(",say I'm Dumb")
         time.sleep(1.5) #wait one point five seconds
         await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
+
+#Custom Commands
+
 
 #Latency Command
 @bot.command(
@@ -156,7 +159,7 @@ async def ping(ctx):
 #Bot Status  
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="/help", type=3)
+    activity = discord.Game(name=",help", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
 
 bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
