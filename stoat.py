@@ -13,33 +13,12 @@ bot = commands.Bot(
     help_command = help_command
     )
 
-#Role Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Role Mod"
-)
-async def rolemod(ctx):
-    await ctx.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
-
-#Sheriff Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Sheriff Mod"
-)
-async def sheriffmod(ctx):
-    await ctx.send("<https://drive.google.com/file/d/1ix81RYmDDvb0uqv1RfOWbWpUbrqUeY0c/view?usp=sharing>")
-
-#Proximity Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Proximity Chat Mod"
-)
-async def proximitymod(ctx):
-    await ctx.send("<https://github.com/ottomated/CrewLink/releases>")
-
 #Invite Command
 @bot.command(
     brief="Shows you the link to invite this bot to your server"
 )
 async def invite(ctx):
-    await ctx.send("<https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=379910&scope=bot>")
+    await ctx.send("<https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=124934&scope=bot>")
 
 #Kick Command
 @bot.command(
@@ -143,17 +122,6 @@ async def say(ctx, arg):
         time.sleep(1.5) #wait one point five seconds
         await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
 
-#autovoice
-@bot.event
-async def on_voice_state_update(ctx, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
-    if after.channel.id == 431432760423612422:
-        channel = await ctx.guild.create_text_channel('test')
-        voiceid = channel.id
-        await ctx.move_to(voiceid)
-
-#Custom Commands (VIP)
-
-
 #Latency Command
 @bot.command(
     brief=("Shows the bots ping")
@@ -161,11 +129,17 @@ async def on_voice_state_update(ctx, member: discord.Member, before: discord.Voi
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
 
+#Anit-Max-Klausel
+@bot.event
+async def on_message(message):
+    await bot.process_commands(message)
+    if message.content == ("https://www.twitch.tv/domaxii"):
+        await message.delete()
+
 #Bot Status  
 @bot.event
 async def on_ready():
-    activity = discord.Game(name=",help", type=3)
+    activity = discord.Game(name=".help", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
-
 
 bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
