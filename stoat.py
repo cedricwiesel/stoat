@@ -134,7 +134,7 @@ async def ping(ctx):
 async def on_message(message):
     await bot.process_commands(message)
     if message.content == ("https://www.twitch.tv/domaxii"):
-        await message.delete()
+        await message.delete(
 
 #Bot Status  
 @bot.event
