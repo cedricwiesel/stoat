@@ -125,7 +125,7 @@ async def say(ctx, arg):
 #Anit-Max-Klausel
 @bot.event
 async def on_message(message):
-    if message.content == ("https://www.twitch.tv/domaxii"):
+    if message.content == ("https://www.twitch.tv/domaxi"):
         await message.delete()
 
 #Latency Command
