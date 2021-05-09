@@ -13,30 +13,6 @@ bot = commands.Bot(
     help_command = help_command
     )
 
-#language for wikipedia
-current_language = "en" #Default language
-
-#Role Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Role Mod"
-)
-async def rolemod(ctx):
-    await ctx.send("<https://drive.google.com/file/d/1NaXSasSYgwgTnxcuvH5Veo2rD1Mx4e5I/view?usp=sharing>")
-
-#Sheriff Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Sheriff Mod"
-)
-async def sheriffmod(ctx):
-    await ctx.send("<https://drive.google.com/file/d/1ix81RYmDDvb0uqv1RfOWbWpUbrqUeY0c/view?usp=sharing>")
-
-#Proximity Mod Command
-@bot.command(
-    brief="Shows the link for Among Us Proximity Chat Mod"
-)
-async def proximitymod(ctx):
-    await ctx.send("<https://github.com/ottomated/CrewLink/releases>")
-
 #Invite Command
 @bot.command(
     brief="Shows you the link to invite this bot to your server"
@@ -121,7 +97,7 @@ async def stfu(ctx):
 
 #Music Command
 @bot.command(
-    brief="(Doesn't) play a song"
+    brief= "(Doesn't) play a song"
 )
 async def p(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
@@ -135,7 +111,7 @@ async def trampoline(ctx):
 
 #Say Command
 @bot.command(
-    brief=("Makes the Bot say something (Requires Admin Permissions)")
+    brief= "Makes the Bot say something (Requires Admin Permissions)"
 )
 async def say(ctx, arg):
     if (ctx.author.id == 270590533880119297) or (ctx.author.id == 435483521193082890) or (ctx.author.id == 529480190368415784) or(ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Id von Sina oder Admin
@@ -146,8 +122,11 @@ async def say(ctx, arg):
         time.sleep(1.5) #wait one point five seconds
         await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
 
-#Custom Commands
-
+#Anit-Max-Klausel
+@bot.event
+async def on_message(message):
+    if message.content == ("https://www.twitch.tv/domaxii"):
+        await message.delete()
 
 #Latency Command
 @bot.command(
