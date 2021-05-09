@@ -9,7 +9,7 @@ help_command = commands.DefaultHelpCommand(
 )
 
 bot = commands.Bot(
-    command_prefix=(","),
+    command_prefix=("."),
     help_command = help_command
     )
 
