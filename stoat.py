@@ -122,11 +122,6 @@ async def say(ctx, arg):
         time.sleep(1.5) #wait one point five seconds
         await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
 
-#Anit-Max-Klausel
-@bot.event
-async def on_message(message):
-    if message.content == ("https://www.twitch.tv/domaxii"):
-        await message.delete()
 
 #Latency Command
 @bot.command(
