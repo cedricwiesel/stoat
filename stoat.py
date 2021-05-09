@@ -99,7 +99,7 @@ async def stfu(ctx):
 @bot.command(
     brief= "(Doesn't) play a song"
 )
-async def p(ctx):
+async def play(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
 
 #Stoat Command
