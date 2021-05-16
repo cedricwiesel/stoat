@@ -138,6 +138,8 @@ async def on_message(message):
     if "https://www.twitch.tv/domaxii" in message.content:
         await message.delete()
 
+bot.customchannels = {}
+
 #Autovoice
 @bot.event
 async def on_voice_state_update(member, before, after):
