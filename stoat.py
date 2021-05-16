@@ -1,6 +1,8 @@
 import discord
 import time
 from discord.ext import commands
+from discord.utils import get
+import asyncio
 import os
 
 #help command modifier
@@ -135,6 +137,23 @@ async def on_message(message):
     await bot.process_commands(message)
     if "https://www.twitch.tv/domaxii" in message.content:
         await message.delete()
+
+#Autovoice
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if after.channel != None:
+        if (after.channel.name == "VC erstellen") or (after.channel.name == "VC erstellen"):
+            for guild in bot.guilds:
+                vcchannel = discord.utils.get(guild.channels, name=("VC erstellen"))
+                maincategory = discord.utils.get(guild.categories, id=after.channel.category.id)
+                channel2 = await guild.create_voice_channel(name=f'VC von {member.display_name}',position=1, category=maincategory)
+                await channel2.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
+                await member.move_to(channel2)
+
+                def check(x, y, z):
+                    return len(channel2.members) == 0
+                await bot.wait_for('voice_state_update', check=check)
+                await channel2.delete()
 
 #Bot Status  
 @bot.event
