@@ -141,18 +141,29 @@ async def on_message(message):
 #Autovoice
 @bot.event
 async def on_voice_state_update(member, before, after):
-    if after.channel != None:
-        if (after.channel.name == "Create VC"):
-            for guild in bot.guilds:
-                maincategory = discord.utils.get(guild.categories, id=after.channel.category.id)
-                channel2 = await guild.create_voice_channel(name=f'VC of {member.display_name}',before=after.channel, category=maincategory)
-                await channel2.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
-                await member.move_to(channel2)
+    if not member.guild.id in bot.customchannels.keys():
+        bot.customchannels[member.guild.id] = {}
 
-                def check(x, y, z):
-                    return len(channel2.members) == 0
-                await bot.wait_for('voice_state_update', check=check)
-                await channel2.delete()
+    if after.channel is not None:
+        if after.channel.name == "Create VC":
+            if member.id in bot.customchannels[member.guild.id].keys():
+                customchannel = bot.get_channel(bot.customchannels[member.guild.id][member.id])
+                if customchannel:
+                    if customchannel.guild.id == after.channel.guild.id:
+                        await member.move_to(customchannel)
+                        return
+
+                    else:
+                        await customchannel.delete()
+
+            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',position=after.channel.position)
+            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
+            await member.move_to(channel)
+            bot.customchannels[member.guild.id][member.id] = channel.id
+
+    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
+        await before.channel.delete()
+        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
 #Bot Status  
 @bot.event
