@@ -142,11 +142,11 @@ async def on_message(message):
 @bot.event
 async def on_voice_state_update(member, before, after):
     if after.channel != None:
-        if (after.channel.name == "VC erstellen") or (after.channel.name == "VC erstellen"):
+        if (after.channel.name == "Create VC"):
             for guild in bot.guilds:
-                vcchannel = discord.utils.get(guild.channels, name=("VC erstellen"))
+                vcchannel = discord.utils.get(guild.channels, name=("Create VC"))
                 maincategory = discord.utils.get(guild.categories, id=after.channel.category.id)
-                channel2 = await guild.create_voice_channel(name=f'VC von {member.display_name}',position=1, category=maincategory)
+                channel2 = await guild.create_voice_channel(name=f'VC of {member.display_name}',position=1, category=maincategory)
                 await channel2.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
                 await member.move_to(channel2)
 
