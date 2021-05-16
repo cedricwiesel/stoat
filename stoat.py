@@ -20,7 +20,7 @@ bot = commands.Bot(
     brief="Shows you the link to invite this bot to your server"
 )
 async def invite(ctx):
-    await ctx.send("<https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=16862230&scope=bot>")
+    await ctx.send("<https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=124934&scope=bot>")
 
 #Kick Command
 @bot.command(
