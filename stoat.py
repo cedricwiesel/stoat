@@ -135,7 +135,7 @@ async def ping(ctx):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    if "https://www.twitch.tv/domaxii" in message.content:
+    if "https://www.twitch.tv/domaxii" in message.content or "https://twitch.tv/domaxii" in message.content:
         await message.delete()
 
 bot.customchannels = {}
