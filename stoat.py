@@ -2,8 +2,7 @@ import discord
 import time
 from discord.ext import commands
 from discord.utils import get
-import asyncio
-import os
+import datetime
 
 #help command modifier
 help_command = commands.DefaultHelpCommand(
@@ -166,6 +165,45 @@ async def on_voice_state_update(member, before, after):
     if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
         await before.channel.delete()
         del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
+
+#Message-Logger
+@bot.event
+async def on_message_delete(message):
+	guild = message.guild
+	log_channel = discord.utils.get(guild.channels, name="logs")
+	if log_channel is None:
+		await bot.process_commands(message)
+		return
+	if not message.author.bot:
+		embed=discord.Embed(
+			color=0xff6347,
+			timestamp=datetime.datetime.utcnow(),
+			description="**Deleted message**:\n{}: {}\n \n**Channel** \n{}".format(message.author.mention, message.content, message.channel.mention)
+		)
+		embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+		if len(message.attachments) > 0:
+			embed.set_image(url = message.attachments[0].url)
+		await log_channel.send(embed=embed)
+		await bot.process_commands(message)
+
+@bot.event
+async def on_message_edit(message, message_before):
+	guild = message.guild
+	log_channel = discord.utils.get(guild.channels, name="logs")
+	if log_channel is None:
+		await bot.process_commands(message)
+		return
+	if not message.author.bot:
+		embed=discord.Embed(
+			color=0xffd700,
+			timestamp=datetime.datetime.utcnow(),
+			description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(message.author.mention, message.content, message.channel.mention, message.jump_url)
+		)
+		embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+		if len(message.attachments) > 0:
+			embed.set_image(url = message.attachments[0].url)
+		await log_channel.send(embed=embed)
+		await bot.process_commands(message)
 
 #Bot Status  
 @bot.event
