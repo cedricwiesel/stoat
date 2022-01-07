@@ -130,16 +130,9 @@ async def say(ctx, arg):
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
 
-#Anit-Max-Klausel
-@bot.event
-async def on_message(message):
-    await bot.process_commands(message)
-    if "https://www.twitch.tv/domaxii" in message.content or "https://twitch.tv/domaxii" in message.content:
-        await message.delete()
-
+#Temopvoice-System
 bot.customchannels = {}
 
-#Autovoice
 @bot.event
 async def on_voice_state_update(member, before, after):
     if not member.guild.id in bot.customchannels.keys():
@@ -166,7 +159,7 @@ async def on_voice_state_update(member, before, after):
         await before.channel.delete()
         del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
-#Message-Logger
+#Message-Delete-Logger
 @bot.event
 async def on_message_delete(message):
 	guild = message.guild
@@ -186,6 +179,7 @@ async def on_message_delete(message):
 		await log_channel.send(embed=embed)
 		await bot.process_commands(message)
 
+#Message-Edit-Logger
 @bot.event
 async def on_message_edit(message, before, after):
      if before.content != after.content:
