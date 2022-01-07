@@ -187,23 +187,24 @@ async def on_message_delete(message):
 		await bot.process_commands(message)
 
 @bot.event
-async def on_message_edit(message, message_before):
-	guild = message.guild
-	log_channel = discord.utils.get(guild.channels, name="logs")
-	if log_channel is None:
-		await bot.process_commands(message)
-		return
-	if not message.author.bot:
-		embed=discord.Embed(
-			color=0xffd700,
-			timestamp=datetime.datetime.utcnow(),
-			description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(message.author.mention, message.content, message.channel.mention, message.jump_url)
-		)
-		embed.set_author(name=message.author, icon_url=message.author.avatar_url)
-		if len(message.attachments) > 0:
-			embed.set_image(url = message.attachments[0].url)
-		await log_channel.send(embed=embed)
-		await bot.process_commands(message)
+async def on_message_edit(message, before, after):
+     if before.content != after.content:
+        guild = message.guild
+        log_channel = discord.utils.get(guild.channels, name="logs")
+        if log_channel is None:
+            await bot.process_commands(message)
+            return
+        if not message.author.bot:
+            embed=discord.Embed(
+                color=0xffd700,
+                timestamp=datetime.datetime.utcnow(),
+                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(message.author.mention, message.content, message.channel.mention, message.jump_url)
+            )
+            embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+            if len(message.attachments) > 0:
+                embed.set_image(url = message.attachments[0].url)
+            await log_channel.send(embed=embed)
+            await bot.process_commands(message)
 
 #Bot Status  
 @bot.event
