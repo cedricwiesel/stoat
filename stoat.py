@@ -130,6 +130,11 @@ async def say(ctx, arg):
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
 
+#test
+@bot.command()
+async def test(ctx):
+    await ctx.send ("Test")
+
 #Temopvoice-System
 bot.customchannels = {}
 
