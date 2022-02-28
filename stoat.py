@@ -81,7 +81,7 @@ async def ban(ctx, member : discord.Member, *, reason = None) :
 
     else:
         await ctx.send ("I do not have ban permissions in this server")
-        
+     
 #Hey Hey Command
 @bot.command(
    brief="Shows a fun GIF" 
@@ -129,11 +129,6 @@ async def say(ctx, arg):
 )
 async def ping(ctx):
      await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
-
-#test
-@bot.command()
-async def test(ctx):
-    await ctx.send ("Test")
 
 #Temopvoice-System
 bot.customchannels = {}
