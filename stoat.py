@@ -26,9 +26,7 @@ async def invite(ctx):
     brief="Kicks a user (Requires Kick Permissions)"
 )
 async def kick(ctx, member : discord.Member, *, reason = None) :
-    if  ctx.guild.me.permissions_in(ctx.message.channel).kick_members:
-
-        if ctx.guild.me.top_role.position > member.top_role.position:
+    if  (ctx.guild.me.permissions_in(ctx.message.channel).kick_members) and (ctx.guild.me.top_role.position > member.top_role.position):
             if member.id == 270590533880119297:
                 await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
             
@@ -44,10 +42,6 @@ async def kick(ctx, member : discord.Member, *, reason = None) :
             else:
                 await member.kick(reason = reason)
                 await ctx.send("User was successfully kicked")
-
-        else:
-            await ctx.send ("I do not have permissions to kick this user")
-
     else:
         await ctx.send ("I do not have kick permissions in this server")
 
@@ -57,9 +51,7 @@ async def kick(ctx, member : discord.Member, *, reason = None) :
     brief="Bans a user (Requires Ban Permissions)"
 )
 async def ban(ctx, member : discord.Member, *, reason = None) :
-    if  ctx.guild.me.permissions_in(ctx.message.channel).ban_members:
-
-        if ctx.guild.me.top_role.position > member.top_role.position:
+    if  ctx.guild.me.permissions_in(ctx.message.channel).ban_members and ctx.guild.me.top_role.position > member.top_role.position:
             if member.id == 270590533880119297:
                 await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
             
@@ -75,10 +67,6 @@ async def ban(ctx, member : discord.Member, *, reason = None) :
             else:
                 await member.ban(reason = reason)
                 await ctx.send("User was successfully banned")
-
-        else:
-            await ctx.send ("I do not have permissions to ban this user")
-
     else:
         await ctx.send ("I do not have ban permissions in this server")
      
@@ -181,24 +169,24 @@ async def on_message_delete(message):
 
 #Message-Edit-Logger
 @bot.event
-async def on_message_edit(message, before, after):
+async def on_message_edit(before, after):
      if before.content != after.content:
-        guild = message.guild
+        guild = before.guild
         log_channel = discord.utils.get(guild.channels, name="logs")
         if log_channel is None:
-            await bot.process_commands(message)
+            await bot.process_commands(before)
             return
-        if not message.author.bot:
+        if not before.author.bot:
             embed=discord.Embed(
                 color=0xffd700,
                 timestamp=datetime.datetime.utcnow(),
-                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(message.author.mention, message.content, message.channel.mention, message.jump_url)
+                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(after.author.mention, before.content, after.channel.mention, after.jump_url)
             )
-            embed.set_author(name=message.author, icon_url=message.author.avatar_url)
-            if len(message.attachments) > 0:
-                embed.set_image(url = message.attachments[0].url)
+            embed.set_author(name=before.author, icon_url=before.author.avatar_url)
+            if len(after.attachments) > 0:
+                embed.set_image(url = after.attachments[0].url)
             await log_channel.send(embed=embed)
-            await bot.process_commands(message)
+            await bot.process_commands(after)
 
 #Bot Status  
 @bot.event
