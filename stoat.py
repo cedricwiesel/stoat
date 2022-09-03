@@ -188,6 +188,24 @@ async def on_message_edit(before, after):
             await log_channel.send(embed=embed)
             await bot.process_commands(after)
 
+#Leave-Logger
+@bot.event
+async def on_member_remove(member):
+    guild = member.guild
+    log_channel = discord.utils.get(guild.channels, name="logs")
+    if log_channel is None:
+        await bot.process_commands()
+        return
+    else:
+        embed=discord.Embed(
+            color=0xB8860B,
+            timestamp=datetime.datetime.utcnow(),
+            description="**Member left**"
+        )
+        embed.set_author(name=member, icon_url=member.avatar_url)
+        await log_channel.send(embed=embed)
+        await bot.process_commands()
+
 #Bot Status  
 @bot.event
 async def on_ready():
