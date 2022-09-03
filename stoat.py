@@ -9,9 +9,13 @@ help_command = commands.DefaultHelpCommand(
     no_category = ('Commands')
 )
 
+intents = discord.Intents.default()
+intents.members = True
+
 bot = commands.Bot(
     command_prefix=("."),
-    help_command = help_command
+    help_command = help_command,
+    intents = intents
     )
 
 #Invite Command
