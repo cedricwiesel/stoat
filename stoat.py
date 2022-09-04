@@ -204,7 +204,7 @@ async def on_member_remove(member):
         embed=discord.Embed(
             color=0xB8860B,
             timestamp=datetime.datetime.utcnow(),
-            description="**Member left**"
+            description="**Member left**:\n{}".format(member.mention)
         )
         embed.set_author(name=member, icon_url=member.avatar_url)
         await log_channel.send(embed=embed)
