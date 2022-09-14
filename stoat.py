@@ -81,13 +81,6 @@ async def ban(ctx, member : discord.Member, *, reason = None) :
 async def hey(ctx):
     await ctx.send("https://tenor.com/view/hayasaka-kaguya-hey-hey-hey-shinomiya-love-is-war-gif-17143662")
 
-#WHO PINGED ME Command
-@bot.command(
-    brief="Shows a fun GIF"
-)
-async def stfu(ctx):
-    await ctx.send("https://tenor.com/view/full-metal-jacket-who-pinged-me-gunnery-sergeant-hartman-chat-ping-pong-gif-11748348")
-
 #Music Command
 @bot.command(
     brief= "(Doesn't) play a song"
@@ -104,7 +97,7 @@ async def trampoline(ctx):
 
 #Say Command
 @bot.command(
-    brief= "Makes the Bot say something (Requires Admin Permissions)"
+    brief= "Makes the Bot say something (Requires Admin Permissions)", hidden = True
 )
 async def say(ctx, arg):
     if (ctx.author.id == 270590533880119297) or (ctx.author.id == 435483521193082890) or (ctx.author.id == 529480190368415784) or(ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Id von Sina oder Admin
@@ -209,6 +202,68 @@ async def on_member_remove(member):
         embed.set_author(name=member, icon_url=member.avatar_url)
         await log_channel.send(embed=embed)
         await bot.process_commands()
+
+#Auto-Role
+@bot.event
+async def on_member_join(member, guild):
+    welcomerole =discord.utils.get(guild.roles, name = "member" or "Member")
+    if member.bot != True:
+        await member.add_roles(welcomerole, reason = "Joined the Server", atomic = True)
+        await bot.process_commands()
+
+#mass-role-add
+@bot.command(
+    brief = "Adds a role to all users", hidden = True
+)
+async def massrole(ctx, arg):
+    if ctx.author.guild_permissions.manage_roles:
+        memberrole = discord.utils.get(ctx.guild.roles, name = arg)
+        for member in ctx.guild.members:
+            if member.bot != True:
+                await member.add_roles(memberrole)
+        await ctx.send ("https://tenor.com/view/finished-elijah-wood-lord-of-the-rings-lava-fire-gif-5894611")
+
+#add-role
+@bot.command(
+    brief = "Assigns a role to you", description = "Assigns a role to you if you have the member role (Requires a Role with Name \"Member\" on your server)"
+)
+async def addrole(ctx, arg):
+    checkmark = '\U00002705'
+    addedrole = discord.utils.get(ctx.guild.roles, name = arg)
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    if addedrole < memberrole:
+        if addedrole in ctx.author.roles:
+            await ctx.send("You already have that role")
+        else:
+            await ctx.author.add_roles(addedrole, reason = "Used the addrole-command", atomic = True)
+            await ctx.message.add_reaction(checkmark)
+
+#remove-role
+@bot.command(
+    brief = "Removes a role from you"
+)
+async def removerole(ctx, arg):
+    checkmark = '\U00002705'
+    removedrole = discord.utils.get(ctx.guild.roles, name = arg)
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    if removedrole < memberrole:
+        if not removedrole in ctx.author.roles:
+            await ctx.send("You do not have that role")
+        else:
+            await ctx.author.remove_roles(removedrole, reason = "Used the removerole-command", atomic = True)
+            await ctx.message.add_reaction(checkmark)
+
+#role-list
+@bot.command(
+    brief = "Shows a list of roles you can get with .addrole"
+)
+async def listroles(ctx):
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    roles = ""
+    for role in ctx.guild.roles:
+        if role < memberrole and role.name != "@everyone":
+            roles += "-" + role.name + "\n"
+    await ctx.send(roles)
 
 #Bot Status  
 @bot.event
