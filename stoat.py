@@ -206,10 +206,9 @@ async def on_member_remove(member):
 #Auto-Role
 @bot.event
 async def on_member_join(member, guild):
-    welcomerole =discord.utils.get(guild.roles, name = "member" or "Member")
-    if member.bot != True:
-        await member.add_roles(welcomerole, reason = "Joined the Server", atomic = True)
-        await bot.process_commands()
+    welcomerole = discord.utils.get(guild.roles, name = "Member")
+    await member.add_roles(welcomerole, reason = "Joined the Server", atomic = True)
+    await bot.process_commands()
 
 #mass-role-add
 @bot.command(
