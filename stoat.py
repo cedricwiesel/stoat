@@ -23,7 +23,7 @@ bot = commands.Bot(
     brief="Shows you the link to invite this bot to your server"
 )
 async def invite(ctx):
-    await ctx.send("<Test>")
+    await ctx.send("https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=8&scope=bot")
 
 #Kick Command
 @bot.command(
@@ -73,13 +73,6 @@ async def ban(ctx, member : discord.Member, *, reason = None) :
                 await ctx.send("User was successfully banned")
     else:
         await ctx.send ("I do not have ban permissions in this server")
-     
-#Hey Hey Command
-@bot.command(
-   brief="Shows a fun GIF" 
-)
-async def hey(ctx):
-    await ctx.send("https://tenor.com/view/hayasaka-kaguya-hey-hey-hey-shinomiya-love-is-war-gif-17143662")
 
 #Music Command
 @bot.command(
@@ -87,13 +80,6 @@ async def hey(ctx):
 )
 async def play(ctx):
     await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
-
-#Stoat Command
-@bot.command(
-    brief="Shows a fun GIF"
-)
-async def trampoline(ctx):
-    await ctx.send("https://gfycat.com/dependentknobbybengaltiger")
 
 #Say Command
 @bot.command(
@@ -203,13 +189,6 @@ async def on_member_remove(member):
         await log_channel.send(embed=embed)
         await bot.process_commands()
 
-#Auto-Role
-@bot.event
-async def on_member_join(member, ctx):
-    welcomerole = discord.utils.get(ctx.guild.roles, name = "Member")
-    await member.add_roles(welcomerole)
-    await bot.process_commands()
-
 #mass-role-add
 @bot.command(
     brief = "Adds a role to all users", hidden = True
@@ -229,7 +208,7 @@ async def massrole(ctx, arg):
 async def addrole(ctx, arg):
     checkmark = '\U00002705'
     addedrole = discord.utils.get(ctx.guild.roles, name = arg)
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
     if addedrole < memberrole:
         if addedrole in ctx.author.roles:
             await ctx.send("You already have that role")
@@ -244,7 +223,7 @@ async def addrole(ctx, arg):
 async def removerole(ctx, arg):
     checkmark = '\U00002705'
     removedrole = discord.utils.get(ctx.guild.roles, name = arg)
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
     if removedrole < memberrole:
         if not removedrole in ctx.author.roles:
             await ctx.send("You do not have that role")
@@ -257,7 +236,7 @@ async def removerole(ctx, arg):
     brief = "Shows a list of roles you can get with .addrole"
 )
 async def listroles(ctx):
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Member")
+    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
     roles = ""
     for role in ctx.guild.roles:
         if role < memberrole and role.name != "@everyone":
