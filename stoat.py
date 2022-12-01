@@ -9,8 +9,9 @@ help_command = commands.DefaultHelpCommand(
     no_category = ('Commands')
 )
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
+intents.messages = True
 
 bot = commands.Bot(
     command_prefix=("."),
@@ -246,7 +247,7 @@ async def listroles(ctx):
 #Bot Status  
 @bot.event
 async def on_ready():
-    activity = discord.Game(name=".help", type=3)
+    activity = discord.Game(name="Now updated for less trash commands", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
 
 bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
