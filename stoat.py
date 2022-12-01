@@ -203,7 +203,7 @@ async def massrole(ctx, arg):
 
 #add-role
 @bot.command(
-    brief = "Assigns a role to you", description = "Assigns a role to you if you have the member role (Requires a Role with Name \"Member\" on your server)"
+    brief = "Assigns a role to you"
 )
 async def addrole(ctx, arg):
     checkmark = '\U00002705'
