@@ -176,9 +176,10 @@ async def on_member_remove(member):
         )
         try:
             embed.set_author(name=member, icon_url=member.avatar_url)
+            await log_channel.send(embed=embed)
         except Exception as noPFP:
             embed.set_author(name=member)
-        await log_channel.send(embed=embed)
+            await log_channel.send(embed=embed)
         await bot.process_commands()
 
 
