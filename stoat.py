@@ -4,8 +4,7 @@ from discord.ext import commands
 import datetime
 
 bot = commands.Bot(
-    command_prefix=".",
-    intents=discord.Intents.default()
+    intents=discord.Intents.all()
 )
 
 
