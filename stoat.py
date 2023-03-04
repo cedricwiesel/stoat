@@ -1,109 +1,92 @@
 import discord
-import time
+from discord import app_commands
 from discord.ext import commands
-from discord.utils import get
 import datetime
 
-#help command modifier
-help_command = commands.DefaultHelpCommand(
-    no_category = ('Commands')
-)
-
-intents = discord.Intents.all()
-intents.members = True
-intents.messages = True
-
 bot = commands.Bot(
-    command_prefix=("."),
-    help_command = help_command,
-    intents = intents
-    )
-
-#Invite Command
-@bot.command(
-    brief="Shows you the link to invite this bot to your server"
+    command_prefix=".",
+    intents=discord.Intents.default()
 )
-async def invite(ctx):
-    await ctx.send("https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=8&scope=bot")
 
-#Kick Command
-@bot.command(
-    brief="Kicks a user (Requires Kick Permissions)"
-)
-async def kick(ctx, member : discord.Member, *, reason = None) :
-    if  (ctx.guild.me.permissions_in(ctx.message.channel).kick_members) and (ctx.guild.me.top_role.position > member.top_role.position):
-            if member.id == 270590533880119297:
-                await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
-            
-            elif member.id == 810913013351055411:
-                await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
 
-            elif not ctx.author.permissions_in(ctx.message.channel).kick_members:
-                await ctx.send("You do not have kick permissions in this server")
+@bot.tree.command(name="test")
+async def test(interaction):
+    await interaction.response.send_message(f"{interaction.user.mention} selber test")
 
-            elif ctx.author.top_role.position < member.top_role.position:
-                await ctx.send("You do not have permission to kick this person")
 
+# invite command
+@bot.tree.command(name="invite", description="gives you a link to invite this bot to your server")
+async def invite(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        "https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=8&scope=bot", ephemeral=True)
+
+
+# say command
+@bot.tree.command(name="say", description="makes the bot say anything")
+@app_commands.describe(message="message you want the bot to send")
+async def say(interaction: discord.Interaction, message: str):
+    await interaction.response.send_message(message)
+
+
+# ping command
+@bot.tree.command(name="ping", description="shows the bots ping")
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message(f"Pong! **{round(bot.latency * 1000)}ms**", ephemeral=True)
+
+
+# add role command
+@bot.tree.command(name="addrole",
+                  description="gives you one of the servers roles (has to be below the \"Custom Roles\" role)")
+@app_commands.describe(role="the role you want added")
+async def addrole(interaction: discord.Interaction, role: str):
+    try:
+        addedrole = discord.utils.get(interaction.guild.roles, name=role)
+        memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+        if addedrole < memberrole:
+            if addedrole in interaction.user.roles:
+                await interaction.response.send_message("You already have that role", ephemeral=True)
             else:
-                await member.kick(reason = reason)
-                await ctx.send("User was successfully kicked")
-    else:
-        await ctx.send ("I do not have kick permissions in this server")
+                await interaction.user.add_roles(addedrole, reason="Used the addrole-command", atomic=True)
+                await interaction.response.send_message("Done", ephemeral=True)
+    except Exception as no:
+        await interaction.response.send_message(
+            "Either there is no role with that name or I do not have permission to add it to you", ephemeral=True)
 
 
-#Ban Command
-@bot.command(
-    brief="Bans a user (Requires Ban Permissions)"
-)
-async def ban(ctx, member : discord.Member, *, reason = None) :
-    if  ctx.guild.me.permissions_in(ctx.message.channel).ban_members and ctx.guild.me.top_role.position > member.top_role.position:
-            if member.id == 270590533880119297:
-                await ctx.send("https://tenor.com/view/no-i-dont-think-i-will-captain-america-old-capt-gif-17162888")
-            
-            elif member.id == 810913013351055411:
-                await ctx.send("https://tenor.com/view/thanos-snap-inevitable-marvel-avengers-endgame-gif-14599588")
+# remove role command
+@bot.tree.command(name="removerole", description="removes a role from you (has to be below the \"Custom Roles\" role)")
+@app_commands.describe(role="the role you want removed")
+async def removerole(interaction: discord.Interaction, role: str):
+    removedrole = discord.utils.get(interaction.guild.roles, name=role)
+    memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+    if removedrole < memberrole:
+        if not removedrole in interaction.user.roles:
+            await interaction.response.send_mnessage("You do not have that role", ephemeral=True)
+        else:
+            await interaction.user.remove_roles(removedrole, reason="Used the removerole-command", atomic=True)
+            await interaction.response.send_message("Done", ephemeral=True)
 
-            elif ctx.author.permissions_in(ctx.message.channel).ban_members:
-                await ctx.send("You do not have ban permissions in this server")
 
-            elif ctx.author.top_role.position < member.top_role.position:
-                await ctx.send("You do not have permission to ban this person")
+# role list command
+@bot.tree.command(name="listroles",
+                  description="shows a list of all the roles available for the `/addrole` and `removerole` commands")
+async def listroles(interaction=discord.Interaction):
+    memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+    roles = ""
+    for role in interaction.guild.roles:
+        if role < memberrole and role.name != "@everyone":
+            roles += "-" + role.name + "\n"
+    await interaction.response.send_message(roles, ephemeral=True)
 
-            else:
-                await member.ban(reason = reason)
-                await ctx.send("User was successfully banned")
-    else:
-        await ctx.send ("I do not have ban permissions in this server")
 
-#Music Command
-@bot.command(
-    brief= "(Doesn't) play a song"
-)
-async def play(ctx):
-    await ctx.send("Huh? Seems like that did not work. For more Information click here: <https://bit.ly/3rUbOoS>")
+# passive systems
 
-#Say Command
-@bot.command(
-    brief= "Makes the Bot say something (Requires Admin Permissions)", hidden = True
-)
-async def say(ctx, arg):
-    if (ctx.author.id == 270590533880119297) or (ctx.author.id == 435483521193082890) or (ctx.author.id == 529480190368415784) or(ctx.author.guild_permissions.administrator): #ID von Cedric oder ID von Wendi oder Id von Sina oder Admin
-        await ctx.send(arg)
 
-    else:
-        await ctx.send(".say I'm Dumb")
-        time.sleep(1.5) #wait one point five seconds
-        await ctx.send("Huh. Doesn't seem to work. Guess I'll need Admin Perms")
+# temp voice system
 
-#Latency Command
-@bot.command(
-    brief=("Shows the bots ping")
-)
-async def ping(ctx):
-     await ctx.send(f'Pong! **{round(bot.latency * 1000)}ms**')
 
-#Temopvoice-System
 bot.customchannels = {}
+
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -122,57 +105,67 @@ async def on_voice_state_update(member, before, after):
                     else:
                         await customchannel.delete()
 
-            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',position=after.channel.position)
-            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
+            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',
+                                                                        position=after.channel.position)
+            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True,
+                                          manage_permissions=True)
             await member.move_to(channel)
             bot.customchannels[member.guild.id][member.id] = channel.id
 
-    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
+    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(
+            before.channel.members) == 0:
         await before.channel.delete()
-        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
+        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[
+            list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
-#Message-Delete-Logger
+
+# Message-Delete-Logger
 @bot.event
 async def on_message_delete(message):
-	guild = message.guild
-	log_channel = discord.utils.get(guild.channels, name="logs")
-	if log_channel is None:
-		await bot.process_commands(message)
-		return
-	if not message.author.bot:
-		embed=discord.Embed(
-			color=0xff6347,
-			timestamp=datetime.datetime.utcnow(),
-			description="**Deleted message**:\n{}: {}\n \n**Channel** \n{}".format(message.author.mention, message.content, message.channel.mention)
-		)
-		embed.set_author(name=message.author, icon_url=message.author.avatar_url)
-		if len(message.attachments) > 0:
-			embed.set_image(url = message.attachments[0].url)
-		await log_channel.send(embed=embed)
-		await bot.process_commands(message)
+    guild = message.guild
+    log_channel = discord.utils.get(guild.channels, name="logs")
+    if log_channel is None:
+        await bot.process_commands(message)
+        return
+    if not message.author.bot:
+        embed = discord.Embed(
+            color=0xff6347,
+            timestamp=datetime.datetime.utcnow(),
+            description="**Deleted message**:\n{}: {}\n \n**Channel** \n{}".format(message.author.mention,
+                                                                                   message.content,
+                                                                                   message.channel.mention)
+        )
+        embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+        if len(message.attachments) > 0:
+            embed.set_image(url=message.attachments[0].url)
+        await log_channel.send(embed=embed)
+        await bot.process_commands(message)
 
-#Message-Edit-Logger
+
+# Message-Edit-Logger
 @bot.event
 async def on_message_edit(before, after):
-     if before.content != after.content:
+    if before.content != after.content:
         guild = before.guild
         log_channel = discord.utils.get(guild.channels, name="logs")
         if log_channel is None:
             await bot.process_commands(before)
             return
         if not before.author.bot:
-            embed=discord.Embed(
+            embed = discord.Embed(
                 color=0xffd700,
                 timestamp=datetime.datetime.utcnow(),
-                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(after.author.mention, before.content, after.channel.mention, after.jump_url)
+                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(
+                    after.author.mention, before.content, after.channel.mention, after.jump_url)
             )
             embed.set_author(name=before.author, icon_url=before.author.avatar_url)
             if len(after.attachments) > 0:
-                embed.set_image(url = after.attachments[0].url)
+                embed.set_image(url=after.attachments[0].url)
             await log_channel.send(embed=embed)
             await bot.process_commands(after)
 
-#Leave-Logger
+
+# Leave-Logger
 @bot.event
 async def on_member_remove(member):
     guild = member.guild
@@ -181,7 +174,7 @@ async def on_member_remove(member):
         await bot.process_commands()
         return
     else:
-        embed=discord.Embed(
+        embed = discord.Embed(
             color=0xB8860B,
             timestamp=datetime.datetime.utcnow(),
             description="**Member left**:\n{}".format(member.mention)
@@ -190,64 +183,16 @@ async def on_member_remove(member):
         await log_channel.send(embed=embed)
         await bot.process_commands()
 
-#mass-role-add
-@bot.command(
-    brief = "Adds a role to all users", hidden = True
-)
-async def massrole(ctx, arg):
-    if ctx.author.guild_permissions.manage_roles:
-        memberrole = discord.utils.get(ctx.guild.roles, name = arg)
-        for member in ctx.guild.members:
-            if member.bot != True:
-                await member.add_roles(memberrole)
-        await ctx.send ("https://tenor.com/view/finished-elijah-wood-lord-of-the-rings-lava-fire-gif-5894611")
 
-#add-role
-@bot.command(
-    brief = "Assigns a role to you"
-)
-async def addrole(ctx, arg):
-    checkmark = '\U00002705'
-    addedrole = discord.utils.get(ctx.guild.roles, name = arg)
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
-    if addedrole < memberrole:
-        if addedrole in ctx.author.roles:
-            await ctx.send("You already have that role")
-        else:
-            await ctx.author.add_roles(addedrole, reason = "Used the addrole-command", atomic = True)
-            await ctx.message.add_reaction(checkmark)
-
-#remove-role
-@bot.command(
-    brief = "Removes a role from you"
-)
-async def removerole(ctx, arg):
-    checkmark = '\U00002705'
-    removedrole = discord.utils.get(ctx.guild.roles, name = arg)
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
-    if removedrole < memberrole:
-        if not removedrole in ctx.author.roles:
-            await ctx.send("You do not have that role")
-        else:
-            await ctx.author.remove_roles(removedrole, reason = "Used the removerole-command", atomic = True)
-            await ctx.message.add_reaction(checkmark)
-
-#role-list
-@bot.command(
-    brief = "Shows a list of roles you can get with .addrole"
-)
-async def listroles(ctx):
-    memberrole = discord.utils.get(ctx.guild.roles, name = "Custom Roles")
-    roles = ""
-    for role in ctx.guild.roles:
-        if role < memberrole and role.name != "@everyone":
-            roles += "-" + role.name + "\n"
-    await ctx.send(roles)
-
-#Bot Status  
 @bot.event
 async def on_ready():
-    activity = discord.Game(name=".help", type=3)
+    activity = discord.Game(name="Testing Slash Commands", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
+    try:
+        synced = await bot.tree.sync()
+        print(f"Synced {len(synced)} commands")
+    except Exception as e:
+        print(e)
+
 
 bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
