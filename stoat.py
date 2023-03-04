@@ -185,7 +185,7 @@ async def on_member_remove(member):
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="Testing Slash Commands", type=3)
+    activity = discord.Game(name="Now updated to implement slash commands", type=3)
     await bot.change_presence(status=discord.Status.online, activity=activity)
     try:
         synced = await bot.tree.sync()
