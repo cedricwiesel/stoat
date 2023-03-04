@@ -4,13 +4,9 @@ from discord.ext import commands
 import datetime
 
 bot = commands.Bot(
+    command_prefix='stoat',
     intents=discord.Intents.all()
 )
-
-
-@bot.tree.command(name="test")
-async def test(interaction):
-    await interaction.response.send_message(f"{interaction.user.mention} selber test")
 
 
 # invite command
@@ -178,7 +174,10 @@ async def on_member_remove(member):
             timestamp=datetime.datetime.utcnow(),
             description="**Member left**:\n{}".format(member.mention)
         )
-        embed.set_author(name=member, icon_url=member.avatar_url)
+        try:
+            embed.set_author(name=member, icon_url=member.avatar_url)
+        except Exception as noPFP:
+            embed.set_author(name=member)
         await log_channel.send(embed=embed)
         await bot.process_commands()
 
