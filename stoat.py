@@ -9,8 +9,11 @@ stoat = commands.Bot(
 )
 
 
+misc = app_commands.Group(name="misc", description="miscellaneous commands")
+
+
 # say command
-@stoat.tree.command(name="say", description="makes the bot say anything")
+@misc.command(name="say", description="makes the bot say anything")
 @app_commands.describe(message="message you want the bot to send")
 async def say(interaction: discord.Interaction, message: str):
     await interaction.response.send_message("sending...", ephemeral=True)
@@ -18,7 +21,7 @@ async def say(interaction: discord.Interaction, message: str):
 
 
 # ping command
-@stoat.tree.command(name="ping", description="shows the bots ping")
+@misc.command(name="ping", description="shows the bots ping")
 async def ping(interaction: discord.Interaction):
     await interaction.response.send(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
 
