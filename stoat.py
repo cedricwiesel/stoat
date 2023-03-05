@@ -105,8 +105,11 @@ async def rolelist(interaction=discord.Interaction):
 @app_commands.describe(name="the name you want for the new role", colour="the color you want your role to be "
                                                                         "(has to be in hexadecimal format)")
 async def create(interaction: discord.Interaction, name: str, colour: str):
-    await interaction.guild.create_role(name=name, colour=discord.Colour.from_str("0x" + colour))
-    await interaction.response.send_message("role created", ephemeral=True)
+    try:
+        await interaction.guild.create_role(name=name, colour=discord.Colour.from_str("0x" + colour))
+        await interaction.response.send_message("role created", ephemeral=True)
+    except Exception:
+        await interaction.response.send_message("that's not a valid color", ephemeral=True)
 
 
 
