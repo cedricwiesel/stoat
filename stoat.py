@@ -9,13 +9,6 @@ stoat = commands.Bot(
 )
 
 
-# invite command
-@stoat.tree.command(name="invite", description="gives you a link to invite this bot to your server")
-async def invite(interaction: discord.Interaction):
-    await interaction.response.send_message(
-        "https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=8&scope=bot", ephemeral=True)
-
-
 # say command
 @stoat.tree.command(name="say", description="makes the bot say anything")
 @app_commands.describe(message="message you want the bot to send")
