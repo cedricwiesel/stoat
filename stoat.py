@@ -26,6 +26,9 @@ async def ping(interaction: discord.Interaction):
     await interaction.response.send(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
 
 
+stoat.tree.add_command(misc)
+
+
 # role commands
 roles = app_commands.Group(name="role", description="use this to manage your roles")
 
@@ -64,7 +67,7 @@ async def removerole(interaction: discord.Interaction, role: str):
 
 # role list command
 @roles.command(name="list",
-                    description="shows a list of all the roles available for the `/addrole` and `removerole` commands")
+                    description="shows a list of all the roles available for the `/role add` and `/role remove` commands")
 async def rolelist(interaction=discord.Interaction):
     memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
     roles = ""
@@ -75,7 +78,6 @@ async def rolelist(interaction=discord.Interaction):
 
 
 stoat.tree.add_command(roles)
-stoat.tree.add_command(misc)
 
 
 # passive systems
