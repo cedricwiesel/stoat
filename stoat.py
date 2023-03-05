@@ -65,7 +65,7 @@ async def addrole(interaction: discord.Interaction, role: str):
             else:
                 await interaction.user.add_roles(addedrole, reason="Used the addrole-command", atomic=True)
                 await interaction.response.send_message("Done", ephemeral=True)
-    except Exception as no:
+    except Exception:
         await interaction.response.send_message(
             "Either there is no role with that name or I do not have permission to add it to you", ephemeral=True)
 
@@ -86,14 +86,18 @@ async def removerole(interaction: discord.Interaction, role: str):
 
 # role list command
 @roles.command(name="list",
-                    description="shows a list of all the roles available for the `/role add` and `/role remove` commands")
+                    description="shows a list of all the roles available for the `/role add` and "
+                                "`/role remove` commands")
 async def rolelist(interaction=discord.Interaction):
     memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
-    roles = ""
+    roles = "**Server Roles**\n"
     for role in interaction.guild.roles:
         if role < memberrole and role.name != "@everyone":
             roles += "-" + role.name + "\n"
-    await interaction.response.send_message(roles, ephemeral=True)
+    embed = discord.Embed(
+        description=roles
+    )
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 stoat.tree.add_command(roles)
@@ -126,7 +130,8 @@ async def on_voice_state_update(member, before, after):
                         await customchannel.delete()
 
             channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}', position=after.channel.position)
-            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
+            await channel.set_permissions(member, connect=True, mute_members=True,
+                                          manage_channels=True, manage_permissions=True)
             await member.move_to(channel)
             stoat.customchannels[member.guild.id][member.id] = channel.id
 
@@ -171,7 +176,8 @@ async def on_message_edit(before, after):
             embed = discord.Embed(
                 color=0xffd700,
                 timestamp=datetime.datetime.utcnow(),
-                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(
+                description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: "
+                            "[Click here to see new message]({})".format(
                     after.author.mention, before.content, after.channel.mention, after.jump_url)
             )
             embed.set_author(name=before.author, icon_url=before.author.display_avatar)
