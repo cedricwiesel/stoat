@@ -100,6 +100,16 @@ async def rolelist(interaction=discord.Interaction):
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
+# create role command
+@roles.command(name="create", description="creates new role")
+@app_commands.describe(name="the name you want for the new role", colour="the color you want your role to be "
+                                                                        "(has to be in hexadecimal format)")
+async def create(interaction: discord.Interaction, name: str, colour: str):
+    await interaction.guild.create_role(name=name, colour=discord.Colour.from_str("0x" + colour))
+    await interaction.response.send_message("role created", ephemeral=True)
+
+
+
 stoat.tree.add_command(roles)
 
 
