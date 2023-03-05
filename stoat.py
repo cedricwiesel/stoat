@@ -30,6 +30,7 @@ async def ping(interaction: discord.Interaction):
     await interaction.response.send(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
 
 
+# role commands
 roles = app_commands.Group(name="role", description="use this to manage your roles")
 
 
