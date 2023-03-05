@@ -20,13 +20,14 @@ async def invite(interaction: discord.Interaction):
 @bot.tree.command(name="say", description="makes the bot say anything")
 @app_commands.describe(message="message you want the bot to send")
 async def say(interaction: discord.Interaction, message: str):
-    await interaction.response.send_message(message)
+    await interaction.response.send_message("sending...", ephemeral=True)
+    await interaction.channel.send(message)
 
 
 # ping command
 @bot.tree.command(name="ping", description="shows the bots ping")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send_message(f"Pong! **{round(bot.latency * 1000)}ms**", ephemeral=True)
+    await interaction.response.send(f"Pong! **{round(bot.latency * 1000)}ms**", ephemeral=True)
 
 
 # add role command
@@ -100,18 +101,14 @@ async def on_voice_state_update(member, before, after):
                     else:
                         await customchannel.delete()
 
-            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',
-                                                                        position=after.channel.position)
-            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True,
-                                          manage_permissions=True)
+            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}', position=after.channel.position)
+            await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
             await member.move_to(channel)
             bot.customchannels[member.guild.id][member.id] = channel.id
 
-    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(
-            before.channel.members) == 0:
+    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
         await before.channel.delete()
-        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[
-            list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
+        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
 
 # Message-Delete-Logger
@@ -130,7 +127,7 @@ async def on_message_delete(message):
                                                                                    message.content,
                                                                                    message.channel.mention)
         )
-        embed.set_author(name=message.author, icon_url=message.author.avatar_url)
+        embed.set_author(name=message.author, icon_url=message.author.display_avatar)
         if len(message.attachments) > 0:
             embed.set_image(url=message.attachments[0].url)
         await log_channel.send(embed=embed)
@@ -153,7 +150,7 @@ async def on_message_edit(before, after):
                 description="**Edited message**:\n{}: {}\n \n**Channel** \n{} \n **After Message**: [Click here to see new message]({})".format(
                     after.author.mention, before.content, after.channel.mention, after.jump_url)
             )
-            embed.set_author(name=before.author, icon_url=before.author.avatar_url)
+            embed.set_author(name=before.author, icon_url=before.author.display_avatar)
             if len(after.attachments) > 0:
                 embed.set_image(url=after.attachments[0].url)
             await log_channel.send(embed=embed)
@@ -174,12 +171,8 @@ async def on_member_remove(member):
             timestamp=datetime.datetime.utcnow(),
             description="**Member left**:\n{}".format(member.mention)
         )
-        try:
-            embed.set_author(name=member, icon_url=member.avatar_url)
-            await log_channel.send(embed=embed)
-        except Exception as noPFP:
-            embed.set_author(name=member)
-            await log_channel.send(embed=embed)
+        embed.set_author(name=member, icon_url=member.display_avatar)
+        await log_channel.send(embed=embed)
         await bot.process_commands()
 
 
