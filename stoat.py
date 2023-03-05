@@ -75,6 +75,7 @@ async def rolelist(interaction=discord.Interaction):
 
 
 stoat.tree.add_command(roles)
+stoat.tree.add_command(misc)
 
 
 # passive systems
