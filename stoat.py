@@ -3,21 +3,21 @@ from discord import app_commands
 from discord.ext import commands
 import datetime
 
-bot = commands.Bot(
+stoat = commands.Bot(
     command_prefix='stoat',
     intents=discord.Intents.all()
 )
 
 
 # invite command
-@bot.tree.command(name="invite", description="gives you a link to invite this bot to your server")
+@stoat.tree.command(name="invite", description="gives you a link to invite this bot to your server")
 async def invite(interaction: discord.Interaction):
     await interaction.response.send_message(
         "https://discord.com/api/oauth2/authorize?client_id=810913013351055411&permissions=8&scope=bot", ephemeral=True)
 
 
 # say command
-@bot.tree.command(name="say", description="makes the bot say anything")
+@stoat.tree.command(name="say", description="makes the bot say anything")
 @app_commands.describe(message="message you want the bot to send")
 async def say(interaction: discord.Interaction, message: str):
     await interaction.response.send_message("sending...", ephemeral=True)
@@ -25,14 +25,16 @@ async def say(interaction: discord.Interaction, message: str):
 
 
 # ping command
-@bot.tree.command(name="ping", description="shows the bots ping")
+@stoat.tree.command(name="ping", description="shows the bots ping")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send(f"Pong! **{round(bot.latency * 1000)}ms**", ephemeral=True)
+    await interaction.response.send(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
+
+
+roles = app_commands.Group(name="role", description="use this to manage your roles")
 
 
 # add role command
-@bot.tree.command(name="addrole",
-                  description="gives you one of the servers roles (has to be below the \"Custom Roles\" role)")
+@roles.command(name="add", description="gives you one of the servers roles (has to be below the \"Custom Roles\" role)")
 @app_commands.describe(role="the role you want added")
 async def addrole(interaction: discord.Interaction, role: str):
     try:
@@ -50,7 +52,7 @@ async def addrole(interaction: discord.Interaction, role: str):
 
 
 # remove role command
-@bot.tree.command(name="removerole", description="removes a role from you (has to be below the \"Custom Roles\" role)")
+@roles.command(name="remove", description="removes a role from you (has to be below the \"Custom Roles\" role)")
 @app_commands.describe(role="the role you want removed")
 async def removerole(interaction: discord.Interaction, role: str):
     removedrole = discord.utils.get(interaction.guild.roles, name=role)
@@ -64,9 +66,9 @@ async def removerole(interaction: discord.Interaction, role: str):
 
 
 # role list command
-@bot.tree.command(name="listroles",
-                  description="shows a list of all the roles available for the `/addrole` and `removerole` commands")
-async def listroles(interaction=discord.Interaction):
+@roles.command(name="list",
+                    description="shows a list of all the roles available for the `/addrole` and `removerole` commands")
+async def rolelist(interaction=discord.Interaction):
     memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
     roles = ""
     for role in interaction.guild.roles:
@@ -75,24 +77,27 @@ async def listroles(interaction=discord.Interaction):
     await interaction.response.send_message(roles, ephemeral=True)
 
 
+stoat.tree.add_command(roles)
+
+
 # passive systems
 
 
 # temp voice system
 
 
-bot.customchannels = {}
+stoat.customchannels = {}
 
 
-@bot.event
+@stoat.event
 async def on_voice_state_update(member, before, after):
-    if not member.guild.id in bot.customchannels.keys():
-        bot.customchannels[member.guild.id] = {}
+    if not member.guild.id in stoat.customchannels.keys():
+        stoat.customchannels[member.guild.id] = {}
 
     if after.channel is not None:
         if after.channel.name == "Create VC":
-            if member.id in bot.customchannels[member.guild.id].keys():
-                customchannel = bot.get_channel(bot.customchannels[member.guild.id][member.id])
+            if member.id in stoat.customchannels[member.guild.id].keys():
+                customchannel = stoat.get_channel(stoat.customchannels[member.guild.id][member.id])
                 if customchannel:
                     if customchannel.guild.id == after.channel.guild.id:
                         await member.move_to(customchannel)
@@ -104,22 +109,22 @@ async def on_voice_state_update(member, before, after):
             channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}', position=after.channel.position)
             await channel.set_permissions(member, connect=True, mute_members=True, manage_channels=True, manage_permissions=True)
             await member.move_to(channel)
-            bot.customchannels[member.guild.id][member.id] = channel.id
+            stoat.customchannels[member.guild.id][member.id] = channel.id
 
-    if before.channel is not None and before.channel.id in bot.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
+    if before.channel is not None and before.channel.id in stoat.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
         await before.channel.delete()
-        del bot.customchannels[member.guild.id][list(bot.customchannels[member.guild.id].keys())[list(bot.customchannels[member.guild.id].values()).index(before.channel.id)]]
+        del stoat.customchannels[member.guild.id][list(stoat.customchannels[member.guild.id].keys())[list(stoat.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
 
 # Message-Delete-Logger
-@bot.event
+@stoat.event
 async def on_message_delete(message):
     guild = message.guild
     log_channel = discord.utils.get(guild.channels, name="logs")
     if log_channel is None:
-        await bot.process_commands(message)
+        await stoat.process_commands(message)
         return
-    if not message.author.bot:
+    if not message.author.stoat:
         embed = discord.Embed(
             color=0xff6347,
             timestamp=datetime.datetime.utcnow(),
@@ -131,19 +136,19 @@ async def on_message_delete(message):
         if len(message.attachments) > 0:
             embed.set_image(url=message.attachments[0].url)
         await log_channel.send(embed=embed)
-        await bot.process_commands(message)
+        await stoat.process_commands(message)
 
 
 # Message-Edit-Logger
-@bot.event
+@stoat.event
 async def on_message_edit(before, after):
     if before.content != after.content:
         guild = before.guild
         log_channel = discord.utils.get(guild.channels, name="logs")
         if log_channel is None:
-            await bot.process_commands(before)
+            await stoat.process_commands(before)
             return
-        if not before.author.bot:
+        if not before.author.stoat:
             embed = discord.Embed(
                 color=0xffd700,
                 timestamp=datetime.datetime.utcnow(),
@@ -154,16 +159,16 @@ async def on_message_edit(before, after):
             if len(after.attachments) > 0:
                 embed.set_image(url=after.attachments[0].url)
             await log_channel.send(embed=embed)
-            await bot.process_commands(after)
+            await stoat.process_commands(after)
 
 
 # Leave-Logger
-@bot.event
+@stoat.event
 async def on_member_remove(member):
     guild = member.guild
     log_channel = discord.utils.get(guild.channels, name="logs")
     if log_channel is None:
-        await bot.process_commands()
+        await stoat.process_commands()
         return
     else:
         embed = discord.Embed(
@@ -173,18 +178,18 @@ async def on_member_remove(member):
         )
         embed.set_author(name=member, icon_url=member.display_avatar)
         await log_channel.send(embed=embed)
-        await bot.process_commands()
+        await stoat.process_commands()
 
 
-@bot.event
+@stoat.event
 async def on_ready():
     activity = discord.Game(name="Now updated to implement slash commands", type=3)
-    await bot.change_presence(status=discord.Status.online, activity=activity)
+    await stoat.change_presence(status=discord.Status.online, activity=activity)
     try:
-        synced = await bot.tree.sync()
+        synced = await stoat.tree.sync()
         print(f"Synced {len(synced)} commands")
     except Exception as e:
         print(e)
 
 
-bot.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
+stoat.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
