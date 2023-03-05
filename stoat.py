@@ -9,6 +9,25 @@ stoat = commands.Bot(
 )
 
 
+# help command
+@stoat.tree.command(name="help", description="shows you how to use the bot")
+async def helpcommand(interaction: discord.Interaction):
+    embed = discord.Embed(
+        description="**Stoat v1.0**\n"
+                    "\n"
+                    "**Temp-Voices**\n"
+                    "You can enable the temp voice feature by creating a voice channel called \"Create VC\". "
+                    "It will create a new voice chat for every user who joins the above mentioned VC and delete it "
+                    "as soon as nobody's left in it.\n"
+                    "\n"
+                    "**Logging**\n"
+                    "You can enable the logging feature by creating a text channel called \"logs\".\n"
+                    "The bot will then send messages to it logging edited messages, deleted messages "
+                    "and people leaving the server. It will also show the pre-edited message or deleted message."
+    )
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
 misc = app_commands.Group(name="misc", description="miscellaneous commands")
 
 
@@ -23,7 +42,7 @@ async def say(interaction: discord.Interaction, message: str):
 # ping command
 @misc.command(name="ping", description="shows the bots ping")
 async def ping(interaction: discord.Interaction):
-    await interaction.response.send(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
+    await interaction.response.send_message(f"Pong! **{round(stoat.latency * 1000)}ms**", ephemeral=True)
 
 
 stoat.tree.add_command(misc)
@@ -124,7 +143,7 @@ async def on_message_delete(message):
     if log_channel is None:
         await stoat.process_commands(message)
         return
-    if not message.author.stoat:
+    if not message.author.bot:
         embed = discord.Embed(
             color=0xff6347,
             timestamp=datetime.datetime.utcnow(),
@@ -148,7 +167,7 @@ async def on_message_edit(before, after):
         if log_channel is None:
             await stoat.process_commands(before)
             return
-        if not before.author.stoat:
+        if not before.author.bot:
             embed = discord.Embed(
                 color=0xffd700,
                 timestamp=datetime.datetime.utcnow(),
