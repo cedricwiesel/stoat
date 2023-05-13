@@ -47,7 +47,6 @@ async def ping(interaction: discord.Interaction):
 
 stoat.tree.add_command(misc)
 
-
 # role commands
 roles = app_commands.Group(name="role", description="use this to manage your roles")
 
@@ -57,13 +56,13 @@ roles = app_commands.Group(name="role", description="use this to manage your rol
 @app_commands.describe(role="the role you want added")
 async def addrole(interaction: discord.Interaction, role: str):
     try:
-        addedrole = discord.utils.get(interaction.guild.roles, name=role)
-        memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
-        if addedrole < memberrole:
-            if addedrole in interaction.user.roles:
+        added_role = discord.utils.get(interaction.guild.roles, name=role)
+        member_role = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+        if added_role < member_role:
+            if added_role in interaction.user.roles:
                 await interaction.response.send_message("You already have that role", ephemeral=True)
             else:
-                await interaction.user.add_roles(addedrole, reason="Used the addrole-command", atomic=True)
+                await interaction.user.add_roles(added_role, reason="Used the addrole-command", atomic=True)
                 await interaction.response.send_message("Done", ephemeral=True)
     except Exception:
         await interaction.response.send_message(
@@ -74,28 +73,28 @@ async def addrole(interaction: discord.Interaction, role: str):
 @roles.command(name="remove", description="removes a role from you (has to be below the \"Custom Roles\" role)")
 @app_commands.describe(role="the role you want removed")
 async def removerole(interaction: discord.Interaction, role: str):
-    removedrole = discord.utils.get(interaction.guild.roles, name=role)
-    memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
-    if removedrole < memberrole:
-        if not removedrole in interaction.user.roles:
-            await interaction.response.send_mnessage("You do not have that role", ephemeral=True)
-        else:
-            await interaction.user.remove_roles(removedrole, reason="Used the removerole-command", atomic=True)
+    removed_role = discord.utils.get(interaction.guild.roles, name=role)
+    member_role = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+    if removed_role < member_role:
+        if removed_role in interaction.user.roles:
+            await interaction.user.remove_roles(removed_role, reason="Used the removerole-command", atomic=True)
             await interaction.response.send_message("Done", ephemeral=True)
+        else:
+            await interaction.response.send_message("You do not have that role", ephemeral=True)
 
 
 # role list command
 @roles.command(name="list",
-                    description="shows a list of all the roles available for the `/role add` and "
-                                "`/role remove` commands")
+               description="shows a list of all the roles available for the `/role add` and "
+                           "`/role remove` commands")
 async def rolelist(interaction=discord.Interaction):
-    memberrole = discord.utils.get(interaction.guild.roles, name="Custom Roles")
-    roles = "**Server Roles**\n"
+    member_role = discord.utils.get(interaction.guild.roles, name="Custom Roles")
+    role_list = "**Server Roles**\n"
     for role in interaction.guild.roles:
-        if role < memberrole and role.name != "@everyone":
-            roles += "-" + role.name + "\n"
+        if role < member_role and role.name != "@everyone":
+            role_list += "-" + role.name + "\n"
     embed = discord.Embed(
-        description=roles
+        description=role_list
     )
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -103,7 +102,7 @@ async def rolelist(interaction=discord.Interaction):
 # create role command
 @roles.command(name="create", description="creates new role")
 @app_commands.describe(name="the name you want for the new role", colour="the color you want your role to be "
-                                                                        "(has to be in hexadecimal format)")
+                                                                         "(has to be in hexadecimal format)")
 async def create(interaction: discord.Interaction, name: str, colour: str):
     try:
         await interaction.guild.create_role(name=name, colour=discord.Colour.from_str("0x" + colour))
@@ -112,9 +111,7 @@ async def create(interaction: discord.Interaction, name: str, colour: str):
         await interaction.response.send_message("that's not a valid color", ephemeral=True)
 
 
-
 stoat.tree.add_command(roles)
-
 
 # passive systems
 
@@ -133,24 +130,27 @@ async def on_voice_state_update(member, before, after):
     if after.channel is not None:
         if after.channel.name == "Create VC":
             if member.id in stoat.customchannels[member.guild.id].keys():
-                customchannel = stoat.get_channel(stoat.customchannels[member.guild.id][member.id])
-                if customchannel:
-                    if customchannel.guild.id == after.channel.guild.id:
-                        await member.move_to(customchannel)
+                custom_channel = stoat.get_channel(stoat.customchannels[member.guild.id][member.id])
+                if custom_channel:
+                    if custom_channel.guild.id == after.channel.guild.id:
+                        await member.move_to(custom_channel)
                         return
 
                     else:
-                        await customchannel.delete()
+                        await custom_channel.delete()
 
-            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}', position=after.channel.position)
+            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',
+                                                                        position=after.channel.position)
             await channel.set_permissions(member, connect=True, mute_members=True,
                                           manage_channels=True, manage_permissions=True)
             await member.move_to(channel)
             stoat.customchannels[member.guild.id][member.id] = channel.id
 
-    if before.channel is not None and before.channel.id in stoat.customchannels[member.guild.id].values() and len(before.channel.members) == 0:
+    if before.channel is not None and before.channel.id in stoat.customchannels[member.guild.id].values() and len(
+            before.channel.members) == 0:
         await before.channel.delete()
-        del stoat.customchannels[member.guild.id][list(stoat.customchannels[member.guild.id].keys())[list(stoat.customchannels[member.guild.id].values()).index(before.channel.id)]]
+        del stoat.customchannels[member.guild.id][list(stoat.customchannels[member.guild.id].keys())[
+            list(stoat.customchannels[member.guild.id].values()).index(before.channel.id)]]
 
 
 # Message-Delete-Logger
