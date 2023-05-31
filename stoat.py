@@ -2,6 +2,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import datetime
+import json
+
+with open("config.json") as cjason:
+    config = json.load(cjason)
 
 stoat = commands.Bot(
     command_prefix='stoat',
@@ -221,7 +225,7 @@ async def on_member_remove(member):
 
 @stoat.event
 async def on_ready():
-    activity = discord.Game(name="Now updated to implement slash commands", type=3)
+    activity = discord.Game(name="Now on GitHub", type=3)
     await stoat.change_presence(status=discord.Status.online, activity=activity)
     try:
         synced = await stoat.tree.sync()
@@ -230,4 +234,4 @@ async def on_ready():
         print(e)
 
 
-stoat.run('ODEwOTEzMDEzMzUxMDU1NDEx.YCqjmA.uB9sySB3IA60i1dLGgQen9Keopw')
+stoat.run(config["token"])
