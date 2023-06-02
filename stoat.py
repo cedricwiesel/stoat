@@ -117,9 +117,6 @@ async def create(interaction: discord.Interaction, name: str, colour: str):
 
 stoat.tree.add_command(roles)
 
-# passive systems
-
-
 # temp voice system
 
 
@@ -131,24 +128,23 @@ async def on_voice_state_update(member, before, after):
     if not member.guild.id in stoat.customchannels.keys():
         stoat.customchannels[member.guild.id] = {}
 
-    if after.channel is not None:
-        if after.channel.name == "Create VC":
-            if member.id in stoat.customchannels[member.guild.id].keys():
-                custom_channel = stoat.get_channel(stoat.customchannels[member.guild.id][member.id])
-                if custom_channel:
-                    if custom_channel.guild.id == after.channel.guild.id:
-                        await member.move_to(custom_channel)
-                        return
+    if after.channel.name == "Create VC":
+        if member.id in stoat.customchannels[member.guild.id].keys():
+            custom_channel = stoat.get_channel(stoat.customchannels[member.guild.id][member.id])
+            if custom_channel:
+                if custom_channel.guild.id == after.channel.guild.id:
+                    await member.move_to(custom_channel)
+                    return
 
-                    else:
-                        await custom_channel.delete()
+                else:
+                    await custom_channel.delete()
 
-            channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',
-                                                                        position=after.channel.position)
-            await channel.set_permissions(member, connect=True, mute_members=True,
-                                          manage_channels=True, manage_permissions=True)
-            await member.move_to(channel)
-            stoat.customchannels[member.guild.id][member.id] = channel.id
+        channel = await after.channel.category.create_voice_channel(name=f'VC of {member.display_name}',
+                                                                    position=after.channel.position)
+        await channel.set_permissions(member, connect=True, mute_members=True,
+                                      manage_channels=True, manage_permissions=True)
+        await member.move_to(channel)
+        stoat.customchannels[member.guild.id][member.id] = channel.id
 
     if before.channel is not None and before.channel.id in stoat.customchannels[member.guild.id].values() and len(
             before.channel.members) == 0:
