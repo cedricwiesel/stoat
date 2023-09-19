@@ -223,7 +223,7 @@ async def on_member_remove(member):
 
 @stoat.event
 async def on_ready():
-    activity = discord.Game(name="Keiner mag FSL", type=3)
+    activity = discord.Game(name="Did you know that stoats can jump almost 2 meters high?", type=3)
     await stoat.change_presence(status=discord.Status.online, activity=activity)
     try:
         synced = await stoat.tree.sync()
